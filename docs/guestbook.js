@@ -3,7 +3,7 @@
  * aplicacion serverless natural...
  * pagina guestbook
  */
-const apiUrl = 'https://5d06b473.us-south.apigw.appdomain.cloud/guestbook';
+const apiUrl = '<Reemplazar por Url API>';
 const guestbook = {
   // retrieve the existing guestbook entries
   get() {
