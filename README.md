@@ -1,4 +1,4 @@
-# Aplicación web y API sin servidor
+# Comentarios en vivo (API sin servidor).
 [![IBM Cloud powered][img-ibmcloud-powered]][url-ibmcloud]
 
 Creará una aplicación web sin servidor alojando contenido de sitio web estático en GitHub Pages e implementando el programa de fondo de la aplicación mediante IBM Cloud™ Functions.
