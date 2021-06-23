@@ -65,7 +65,7 @@ Agenda
 2.Seleccionamos Cloudant. 
 ![](img/imc2.png)
  
-3.Lo nombramos guestbook-db, seleccionamos Legacy Credentials y IAM, posteriormente creamos una instancia del servicio. 
+3.Lo nombramos comentarios-db, seleccionamos Legacy Credentials y IAM, posteriormente creamos una instancia del servicio. 
 ![](img/imc3.png)
  
 4.Ya que el servicio este desplegado y listo para usar, en el tab de “Service Credentials” buscarmo si ya tenemos alguna creada, si no es asi, generamos una nueva credencial, que usaremos más adelante. 
@@ -85,7 +85,7 @@ En esta sección configuraremos nuestro servicio de Functions.
 	![](img/im2.png)  
 	3. Damos click en "Create". 
 	![](img/im3.png) 
-	5. Ponemos el nombre "prepare-entry-for-save" y seleccionamos "Node.js 10" como el Runtime, damos click en "Create". 
+	5. Ponemos el nombre "prepara-dato-para-salvar" y seleccionamos "Node.js 12" como el Runtime, damos click en "Create". 
 	![](img/im4.png) 
 	6. Cambiamos el código por el siguiente:
 		``` js
@@ -108,22 +108,22 @@ En esta sección configuraremos nuestro servicio de Functions.
 	8. Para añadir nuestra acción a una secuencia primero nos vamos al tab “Enclosing Secuences” y damos click en “Add to Sequence”.
 	 
 	![](img/im6.png) 
- 	9.	Para el nombre de la secuencia ponemos "save-guestbook-entry-sequence" y posteriormente damos click en "Create and Add". 
+ 	9.	Para el nombre de la secuencia ponemos "guardar-comentario-secuencia" y posteriormente damos click en "Create and Add". 
 	![](img/im7.png) 
 	10.	Una vez que esta creada nuestra secuencia le damos click al nombre de la secuencia "save-guestbook-entry-sequence" y posteriormente damos click en "Add". 
 	![](img/im8.png) 
  	11.	Damos click en "Use Public" y seleccionamos "Cloudant". 
 	![](img/im9.png) 
- 	12.	Seleccionamos la acción "create-document", damos click en "New Binding", ponemos de nombre de nuestro paquete "binding-for-guestbook" y en "Instance" seleccionamos "Input Your Own Credentials". 
+ 	12.	Seleccionamos la acción "create-document", damos click en "New Binding", ponemos de nombre de nuestro paquete "enlace-para-comentarios" y en "Instance" seleccionamos "Input Your Own Credentials". 
 	![](img/im10.png) 
  	13.	 Nos desplegara una lista. Para llenar estos datos copiamos las credenciales que tenemos en nuestro servicio de "Cloudant" y damos click en "Add", lo llenamos de la siguiente manera: 
 	![](img/im11.png) 
  	14.	Para probar que esté funcionando, damos click en "save" y luego en "change input" e ingresamos nuestro siguiente JSON y damos click en Apply y luego en Invoke
 	 ``` json
 		{
-		"nombre": "Isaac Carrada",
-		"correo": "isaac@carrada.com",
-		"comentario": "HOLA MUNDO"
+		"nombre": "Jorge Perez",
+		"correo": "jorge@perez.com",
+		"comentario": "Felicidades!!"
 		}
 	```
 	Una vez hecho esto y nos de una id de activacion correcta, podremos verlo escrito en nuestra base de datos de "Cloudant", en el "Dashboard", en la sección "Documents" 
@@ -134,7 +134,7 @@ En esta sección configuraremos nuestro servicio de Functions.
 Esta secuencia la usaremos para tomar las entradas de cada usuario y sus respectivos comentarios, regresemos a "Functions/Actions".
  
 ![](img/im15.png) 
-	1.	En nuestra tab de functions creamos una nueva acción Node.js y le ponemos el nombre "set-read-input", siguiendo el mismo proceso que en la acción anterior. 
+	1.	En nuestra tab de functions creamos una nueva acción Node.js y le ponemos el nombre "inicio-leer-comentario", siguiendo el mismo proceso que en la acción anterior. 
 	![](img/im16.png) 
 	![](img/im17.png) 
 	![](img/im18.png) 
@@ -150,18 +150,18 @@ Esta secuencia la usaremos para tomar las entradas de cada usuario y sus respect
 		```
 	3. Damos click en "Save" y click en "Enclosing Sequences". 
 	![](img/im19.png) 
-	4. Damos "Add to Sequence" y "Create New" con el nombre "read-guestbook-entries-sequence", y damos click en "Create and Add".
+	4. Damos "Add to Sequence" y "Create New" con el nombre "leer-comentarios-secuencia", y damos click en "Create and Add".
 	 
 	![](img/im20.png) 
-	5. Damos click en el nombre de la secuencia "read-guestbook-entries-sequence".
+	5. Damos click en el nombre de la secuencia "leer-comentarios-secuencia".
  	6. Damos click en "Add" para crear una segunda acción en la secuencia.
 	7. Seleccionamos "Public" y "Cloudant".
- 	8.	Seleccionamos "list-documents" en actions y seleccionamos el binding "binding-for-guestbook" y posteriormente damos click en "Add". 
+ 	8.	Seleccionamos "list-documents" en actions y seleccionamos el binding "enlace-para-comentarios" y posteriormente damos click en "Add". 
 	![](img/im21.png) 
  	9.	Damos click en "Save" y luego en "Add" para añadir una acción más a la secuencia, esta es la que va a dar el formato de los documentos cuando regresen de Cloudant.
-	10.	La nombraremos "format-entries" y posteriormente damos click en "Create and add". 
+	10.	La nombraremos "formato-comentarios" y posteriormente damos click en "Create and add". 
 	![](img/im22.png)  
-	11.	Damos click en "Save" y luego en nuestra accion "format-entries" y reemplazamos el código con:
+	11.	Damos click en "Save" y luego en nuestra accion "formato-comentarios" y reemplazamos el código con:
 		``` js
 		const md5 = require('spark-md5');
 			
@@ -193,9 +193,9 @@ Y nos quede de la siguiente manera:
 4.	En el "API name *" ponemos "guestbook" y en el "Base path for API *" ponemos "/guestbook" y damos click en "create operation".
  
 ![](img/im29.png)  
-5.	Creamos un "Path *" que sea "/entries" ponemos el verbo a "GET" y seleccionamos la secuencia "read-guestbook-entries-sequence" y damos click en "Create". 
+5.	Creamos un "Path *" que sea "/entries" ponemos el verbo a "GET" y seleccionamos la secuencia "leer-comentarios-secuencia" y damos click en "Create". 
 ![](img/im30.png) 
-6.	Realizamos la misma acción pero ahora con un "POST" y la secuencia "save-guestbook-entries-sequence" y damos click en "Create".
+6.	Realizamos la misma acción pero ahora con un "POST" y la secuencia "guardar-comentarios-secuencia" y damos click en "Create".
  
 ![](img/im31.png) 
 7.	Nos dirigimos hasta abajo y damos click en "Create" para exponer la API. 
